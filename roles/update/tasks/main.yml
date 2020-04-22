@@ -1,0 +1,21 @@
+---
+- name: Run apt- autoremove, autoclean, dpkg configure, purge, update_cache, upgrade
+  apt:
+    autoremove: yes
+    autoclean: yes
+    dpkg_options: "force-confdef,force-confold"
+    purge: yes
+    update_cache: yes
+    upgrade: dist
+
+- name: Run apt- autoremove (again)
+  apt:
+    autoremove: true
+
+- name: Ensure update-manager-core is installed.
+  apt:
+    name: update-manager-core
+    state: latest
+
+- name: Unconditionally reboot
+  reboot:

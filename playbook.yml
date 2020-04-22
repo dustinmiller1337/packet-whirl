@@ -1,0 +1,77 @@
+---
+- hosts: all
+  remote_user: root
+  become: 'yes'
+  gather_facts: true
+
+  roles:
+    - update
+    - packages
+    - firewall
+    - robertdebock.bootstrap
+    - robertdebock.update
+    - robertdebock.hostname
+    - robertdebock.users
+    - robertdebock.python_pip
+    - robertdebock.fail2ban
+    - robertdebock.docker_ce
+    - dev-sec.ssh-hardening
+    - dev-sec.os-hardening
+    - arillso.motd
+    - traefik
+
+  vars:
+    ##################### required ##################################
+    # traefik_domain
+    traefik_domain: example.com
+
+    # cloudflare
+    cloudflare_api_key: 74f203f0378f19c8be66115f206a83783e957
+    cloudflare_email: human@example.com
+
+    # robertdebock.users
+    user: human
+    #################################################################
+
+    ##
+    # Everything below here should be safe defaults
+    ##
+    group: docker
+    users_group_list:
+      - name: "{{ user }}"
+        gid: 1024
+      - name: docker
+      - name: wheel
+    users_user_list:
+      - name: "{{ user }}"
+        uid: 1024
+        group: "{{ user }}"
+        groups: wheel, docker
+        cron_allow: true
+        sudo_options: "ALL=(ALL) NOPASSWD: ALL"
+        authorized_keys:
+          - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+    # dev-sec.ssh-hardening
+    sftp_enabled: true
+    ssh_allow_tcp_forwarding: true
+    ssh_use_pam: true
+
+    # dev-sec.os-hardening
+    os_auditd_enabled: false
+    sysctl_overwrite:
+      net.ipv4.ip_forward: 1
+      net.ipv6.conf.all.forwarding: 1
+
+    # traefik
+    traefik_dir: /etc/traefik
+    traefik_version: v2.2
+
+    # robertdebock.hostname
+    hostname: "{{ traefik_domain }}"
+
+    # generic
+    ansible_python_interpreter: python3
+
+    # robertdebock.bootstrap
+    bootstrap_wait_for_host: false

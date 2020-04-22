@@ -1,0 +1,39 @@
+---
+- name: Ensure firewalld is installed
+  package:
+    name: firewalld
+    state: present
+
+- name: Ensure firewalld is running and enabled on boot
+  service:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: Add masquerade
+  firewalld:
+    masquerade: 'yes'
+    immediate: true
+    permanent: true
+    state: enabled
+
+- name: Disable dhcpv6-client service
+  firewalld:
+    service: dhcpv6-client
+    immediate: true
+    permanent: true
+    state: disabled
+
+- name: Enable http service
+  firewalld:
+    service: http
+    immediate: true
+    permanent: true
+    state: enabled
+
+- name: Enable https service
+  firewalld:
+    service: https
+    immediate: true
+    permanent: true
+    state: enabled

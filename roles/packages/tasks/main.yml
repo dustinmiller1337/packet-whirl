@@ -1,0 +1,17 @@
+---
+- name: Install required packages
+  package:
+    name:
+      - firewalld
+      - libgpgme-dev
+      - net-tools
+      - pkg-config
+      - screen
+    state: latest
+
+- name: Remove unused packages
+  package:
+    name:
+      - cups
+      - ufw
+    state: absent

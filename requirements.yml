@@ -1,0 +1,12 @@
+---
+- robertdebock.bootstrap
+- robertdebock.core_dependencies
+- robertdebock.update
+- robertdebock.hostname
+- robertdebock.users
+- robertdebock.python_pip
+- robertdebock.fail2ban
+- robertdebock.docker_ce
+- dev-sec.ssh-hardening
+- dev-sec.os-hardening
+- arillso.motd

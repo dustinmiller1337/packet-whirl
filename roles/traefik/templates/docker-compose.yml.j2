@@ -1,0 +1,73 @@
+version: "3"
+
+services:
+  traefik:
+    image: "traefik:{{ traefik_version }}"
+    container_name: "traefik"
+    command:
+      # Globals
+      - --log.level=ERROR
+      - --api=true
+      - --global.sendAnonymousUsage=false
+      # Docker
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.endpoint=unix:///var/run/docker.sock
+      # Entrypoints
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      # LetsEncrypt
+      - --certificatesresolvers.letsencrypt.acme.email={{ cloudflare_email }}
+      - --certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare
+      - --certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme.json
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      - CF_API_EMAIL={{ cloudflare_email }}
+      - CF_API_KEY={{ cloudflare_api_key }}
+    volumes:
+      - /etc/traefik/acme.json:/etc/traefik/acme.json
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      # API
+      - traefik.enable=true
+      # Global http-->https
+      - traefik.http.routers.http-catchall.rule=hostregexp(`{host:[a-z-.]+}`)
+      - traefik.http.routers.http-catchall.entrypoints=web
+      - traefik.http.routers.http-catchall.middlewares=redirect-to-https
+      - traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https
+
+  whoami:
+    image: containous/whoami
+    container_name: "whoami"
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.whoami.entrypoints=websecure
+      - traefik.http.routers.whoami.rule=Host(`whoami.{{ traefik_domain }}`)
+      - traefik.http.routers.whoami.tls.certresolver=letsencrypt
+
+  linx:
+    image: andreimarcu/linx-server
+    container_name: linx
+    command:
+      [
+        "-sitename=linx",
+        "-allowhotlink",
+        "-force-random-filename",
+        "-selifpath=img"
+      ]
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.linx.entrypoints=websecure
+      - traefik.http.routers.linx.rule=Host(`i.{{ traefik_domain }}`)
+      - traefik.http.routers.linx.tls.certresolver=letsencrypt
+
+  nginx:
+    image: nginx:mainline-alpine
+    container_name: site
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.nginx.entrypoints=websecure
+      - traefik.http.routers.nginx.rule=Host(`{{ traefik_domain }}`)
+      - traefik.http.routers.nginx.tls.certresolver=letsencrypt

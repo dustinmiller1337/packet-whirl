@@ -1,0 +1,59 @@
+---
+kind: pipeline
+type: docker
+name: Linters
+
+trigger:
+  branch:
+    - master
+
+steps:
+  - name: write-good
+    image: node:current-alpine
+    commands:
+      - yarn global add write-good --silent
+      - write-good readme.md
+    depends_on: [clone]
+
+  - name: alex
+    image: node:current-alpine
+    commands:
+      - yarn global add alex --silent
+      - alex -t readme.md
+    depends_on: [clone]
+
+  - name: yamllint
+    image: python:alpine
+    commands:
+      - pip3 install --quiet yamllint
+      - yamllint  --config-file .yamllint.config --strict *.yml
+      - yamllint  --config-file .yamllint.config --strict .*.yml
+    depends_on: [clone]
+
+  - name: coala-bears
+    image: coala/base
+    commands:
+      - coala --non-interactive --no-autoapply-warn --bears YAMLLintBear
+    depends_on: [clone]
+
+  - name: ansible-lint
+    image: python:slim
+    commands:
+      - pip3 install --quiet ansible-lint
+      - ansible-lint .
+    depends_on: [clone]
+
+  - name: markdownlint
+    image: ruby:alpine
+    commands:
+      - gem install mdl
+      - mdl readme.md
+    depends_on: [clone]
+
+  - name: tflint
+    image: wata727/tflint
+    commands:
+      - tflint *.tf
+      - tflint provider/cloudflare/cloudflare.tf
+      - tflint provider/packet/packet.tf
+    depends_on: [clone]
