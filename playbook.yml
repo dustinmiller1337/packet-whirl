@@ -64,7 +64,7 @@
 
     # traefik
     traefik_dir: /etc/traefik
-    traefik_version: v2.2
+    traefik_version: v2.3
 
     # robertdebock.hostname
     hostname: "{{ traefik_domain }}"
