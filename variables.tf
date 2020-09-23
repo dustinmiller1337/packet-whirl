@@ -1,27 +1,21 @@
 ## Packet
 
-variable "packet_auth_token" {
-  default = ""
-}
+variable "packet_auth_token" {}
 
-variable "packet_project_id" {
-  default = ""
-}
+variable "packet_project_id" {}
 
-variable "packet_plan" {
-  default = ""
-}
+variable "packet_plan" {}
 
 variable "packet_facility" {
-  default = ""
+  default = "sv15"
 }
 
 variable "packet_operating_system" {
-  default = ""
+  default = "ubuntu_20_04"
 }
 
 variable "packet_billing_cycle" {
-  default = ""
+  default = "hourly"
 }
 
 variable "packet_user_data" {
@@ -32,20 +26,12 @@ variable "packet_hosts" {
   default = 1
 }
 
-variable "packet_hostname" {
-  default = ""
-}
+variable "packet_hostname" {}
 
 ## Cloudflare
 
-variable "cloudflare_email" {
-  default = ""
-}
+variable "cloudflare_email" {}
 
-variable "cloudflare_api_key" {
-  default = ""
-}
+variable "cloudflare_api_key" {}
 
-variable "cloudflare_domain" {
-  default = ""
-}
+variable "cloudflare_domain" {}
