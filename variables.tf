@@ -4,7 +4,9 @@ variable "packet_auth_token" {}
 
 variable "packet_project_id" {}
 
-variable "packet_plan" {}
+variable "packet_plan" {
+ default = "c3.small.x86"
+}
 
 variable "packet_facility" {
   default = "sv15"
