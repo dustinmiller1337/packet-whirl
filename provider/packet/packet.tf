@@ -43,9 +43,9 @@ resource "packet_device" "host" {
 }
 
 output "public_ipv4" {
-  value = "packet_device.host.*.access_public_ipv4"
+  value = packet_device.host.*.access_public_ipv4
 }
 
 output "public_ipv6" {
-  value = "packet_device.host.*.access_public_ipv6"
+  value = packet_device.host.*.access_public_ipv6
 }
