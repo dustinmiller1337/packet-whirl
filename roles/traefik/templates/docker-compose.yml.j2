@@ -3,7 +3,7 @@ version: "3"
 services:
   traefik:
     image: "traefik:{{ traefik_version }}"
-    container_name: "traefik"
+    container_name: traefik
     command:
       # Globals
       - --log.level=ERROR
@@ -40,7 +40,7 @@ services:
 
   whoami:
     image: containous/whoami
-    container_name: "whoami"
+    container_name: whoami
     labels:
       - traefik.enable=true
       - traefik.http.routers.whoami.entrypoints=websecure
