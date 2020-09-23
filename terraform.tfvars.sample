@@ -2,8 +2,8 @@
 
 packet_auth_token       = "7Y9ygdjkmYFSiwL8JnjDw8biubTHS3Dt"
 packet_project_id       = "eb975631-421b-8a3e-15cd-1d2ea7671961"
-packet_plan             = "c1.small.x86"
-packet_facility         = "sjc1"
+packet_plan             = "c3.small.x86"
+packet_facility         = "sv15"
 packet_operating_system = "ubuntu_19_10"
 packet_billing_cycle    = "hourly"
 packet_user_data        = ""
