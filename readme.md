@@ -1,4 +1,4 @@
-# packet-whirl
+# terraform-metal-whirl
 
 [![Build Status](https://cloud.drone.io/api/badges/dustinmiller1337/packet-whirl/status.svg)](https://cloud.drone.io/dustinmiller1337/packet-whirl)
 
